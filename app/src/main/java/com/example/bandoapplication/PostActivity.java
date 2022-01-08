@@ -79,7 +79,7 @@ public class PostActivity extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Posting");
         pd.show();
-        if (mImageUri != null){
+        //if (mImageUri != null){
             final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(mImageUri));
 
@@ -127,9 +127,9 @@ public class PostActivity extends AppCompatActivity {
                 }
             });
 
-        } else {
-            Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
-        }
+        //} else {
+         //   Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
+        //}
     }
 
     @Override

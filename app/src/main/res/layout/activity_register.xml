@@ -9,13 +9,21 @@
     android:padding="10dp"
     tools:context=".RegisterActivity">
 
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="351dp"
         android:layout_height="264dp"
         android:layout_gravity="center"
         app:srcCompat="@drawable/bando_logo" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/username"
@@ -69,4 +77,5 @@
         android:text="Already have an account? Log In"
         android:id="@+id/txt_login"
         android:layout_marginTop="10dp"/>
+
 </LinearLayout>

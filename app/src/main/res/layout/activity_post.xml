@@ -24,23 +24,32 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_close"
-                    android:id="@+id/close"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    app:srcCompat="?attr/actionModeCloseDrawable" />
 
                 <TextView
+                    android:id="@+id/post3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="56dp"
+                    android:layout_marginRight="56dp"
+                    android:text="SELL"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:text="POST"
-                    android:id="@+id/post"
-                    android:textSize="16sp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -54,22 +63,22 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/image_added"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher" />
-
         <EditText
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="230dp"
             android:layout_marginTop="15dp"
-            android:hint="Description"
+            android:gravity="top"
+            android:hint="What are you looking for..."
             android:maxLines="5"
             android:minHeight="48dp" />
+
+        <ImageView
+            android:id="@+id/image_added"
+            android:layout_width="83dp"
+            android:layout_height="62dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_launcher" />
 
 
     </LinearLayout>

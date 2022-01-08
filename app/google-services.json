@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "668279101823",
+    "firebase_url": "https://bando-application-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "bando-application",
     "storage_bucket": "bando-application.appspot.com"
   },

@@ -1,19 +1,17 @@
 package com.example.bandoapplication.Model;
 
 public class User {
-
     private String id;
     private String username;
     private String fullname;
     private String imageurl;
     private String bio;
+    private String email;
 
-    public User(String id, String username, String fullname, String imageurl, String bio) {
-        this.id = id;
+    public User(String username, String fullname, String email){
         this.username = username;
         this.fullname = fullname;
-        this.imageurl = imageurl;
-        this.bio = bio;
+        this.email = email;
     }
 
     public User() {
@@ -57,5 +55,13 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
