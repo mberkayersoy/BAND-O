@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -132,15 +134,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void updateProfile(String fullname, String username, String bio) {
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid());
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("Users").document(firebaseUser.getUid());
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("fullname", fullname);
         map.put("username", username);
         map.put("bio", bio);
 
-        reference.updateChildren(map);
-
+        reference.update(map);
         Toast.makeText(EditProfileActivity.this, "Successfully updated!", Toast.LENGTH_SHORT).show();
     }
 

@@ -17,24 +17,26 @@
         android:layout_marginStart="5dp"
         android:orientation="vertical"
         android:layout_centerVertical="true">
-        
+
         <TextView
+            android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/username"
-            android:text="username"
             android:maxLines="1"
+            android:text="username"
             android:textStyle="bold" />
 
     </LinearLayout>
-    
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:background="@drawable/button_background"
         android:id="@+id/btn_message"
-        android:textColor="@color/browser_actions_bg_grey"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:visibility="gone"/>
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_background"
+        android:text="Send Message"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:visibility="gone" />
 </RelativeLayout>

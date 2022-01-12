@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.example.bandoapplication.EditProfileActivity;
 import com.example.bandoapplication.Model.Post;
 import com.example.bandoapplication.Model.User;
 import com.example.bandoapplication.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +30,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -39,12 +44,13 @@ public class ProfileFragment extends Fragment {
     String userID;
 
     FirebaseUser firebaseUser;
-    DatabaseReference reference;
+//    DatabaseReference reference;
+
+    DocumentReference reference;
 
     String profileid;
 
     private RecyclerView recyclerView;
-    private List<Post> postList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,11 +58,11 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = firebaseUser.getUid();
 
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         profileid = prefs.getString("profileid", "none");
+        reference = FirebaseFirestore.getInstance().collection("Users").document(userID);
 
         image_profile = view.findViewById(R.id.image_profile);
         edit_profile = view.findViewById(R.id.edit_profile);
@@ -66,7 +72,7 @@ public class ProfileFragment extends Fragment {
 
         userInfo();
 
-        if (profileid.equals(firebaseUser.getUid())){
+        if (profileid.equals(firebaseUser.getUid())) {
             edit_profile.setText("Edit Profile");
         }
 
@@ -81,51 +87,46 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-                    return view;
+        return view;
     }
 
-    private void getNrPosts() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int i=0;
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Post post = snapshot.getValue(Post.class);
-                    if (post.getPublisher().equals(profileid)) {
-                        i++;
-                    }
-                }
-                //posts.setText("" + i);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    @Override
+    public void onStart() {
+        super.onStart();
+        userInfo();
     }
 
-    private void userInfo(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(profileid);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (getContext() == null){
-                    return;
-                }
-                User user = dataSnapshot.getValue(User.class);
+    //    private void getNrPosts() {
+//       // DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                int i=0;
+//                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Post post = snapshot.getValue(Post.class);
+//                    if (post.getPublisher().equals(profileid)) {
+//                        i++;
+//                    }
+//                }
+//                //posts.setText("" + i);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
+    private void userInfo() {
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
                 Glide.with(getContext()).load(user.getImageurl()).into(image_profile);
                 username.setText(user.getUsername());
                 fullname.setText(user.getFullname());
                 bio.setText(user.getBio());
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

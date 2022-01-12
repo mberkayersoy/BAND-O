@@ -19,6 +19,9 @@ import android.widget.EditText;
 import com.example.bandoapplication.Adapter.UserAdapter;
 import com.example.bandoapplication.Model.User;
 import com.example.bandoapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +58,7 @@ public class SearchFragment extends Fragment {
         search_bar = view.findViewById(R.id.search_bar);
 
         userList = new ArrayList<>();
-        userAdapter = new UserAdapter(getContext(),userList);
+        userAdapter = new UserAdapter(getContext(), userList);
         recyclerView.setAdapter(userAdapter);
 
         readUsers();
@@ -64,7 +70,12 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUsers(charSequence.toString().toLowerCase());
+                String search = charSequence.toString().toLowerCase();
+                if (search.equals("")) {
+                    readUsers();
+                } else {
+                    searchUsers(search);
+                }
             }
 
             @Override
@@ -76,56 +87,36 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    private void searchUsers(String s){
-        Log.d("search","GIRDI");
-        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
-                .startAt(s)
-                .endAt(s+"\uf8ff");
-
-        query.addValueEventListener(new ValueEventListener() {
+    private void searchUsers(String s) {
+        Task<QuerySnapshot> query = FirebaseFirestore.getInstance().collection("Users").orderBy("username").get();
+        query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    User user = snapshot.getValue(User.class);
-                    Log.d("HATA", user.getUsername());
-                    userList.add(user);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    userList.clear();
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        User user = snapshot.toObject(User.class);
+                    }
                 }
-
                 userAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     private void readUsers() {
-
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-
-        reference.addValueEventListener(new ValueEventListener() {
+        Task<QuerySnapshot> query = FirebaseFirestore.getInstance().collection("Users").orderBy("username").get();
+        query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (search_bar.getText().toString().equals("")) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
                     userList.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        User user = snapshot.getValue(User.class);
-
-                        userList.add(user);
-
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        User user = snapshot.toObject(User.class);
+                        Log.d("HATA", user.getUsername());
+                            userList.add(user);
                     }
-
-                    userAdapter.notifyDataSetChanged();
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                userAdapter.notifyDataSetChanged();
             }
         });
     }

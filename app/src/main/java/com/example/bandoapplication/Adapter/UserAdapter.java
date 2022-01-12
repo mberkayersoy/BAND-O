@@ -1,6 +1,7 @@
 package com.example.bandoapplication.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public UserAdapter(Context mContext, List<User> mUsers) {
         this.mContext = mContext;
         this.mUsers = mUsers;
+        //Log.d("UserAdapter", "Constr: "+mUsers.size());
+        /*for(User u : mUsers) {
+            Log.d("UserAdapter", "UserAdapter: "+u.getUsername());
+        }*/
     }
 
     @NonNull
